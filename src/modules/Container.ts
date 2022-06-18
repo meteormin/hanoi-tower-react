@@ -2,8 +2,8 @@ import {
   Container as ContainerInterface,
   Plate as PlateInterface,
   Column as ColumnInterface,
-  ContainerDeps,
-} from '../types';
+  ContainerDeps
+} from "../types";
 
 class Container implements ContainerInterface {
   private readonly _level: number;
@@ -110,16 +110,16 @@ class Container implements ContainerInterface {
     this.move(Container._RIGHT);
   };
 
-  public select = (loc?: number, down?: boolean) => {
+  private select = (loc?: number, drop?: boolean) => {
     this._selectColumn = loc == undefined ? this._selectColumn : loc;
     if (this._selectPlate == null) {
-      if (!down) {
+      if (!drop) {
         this._prevColumn = this._selectColumn;
       }
       this._selectPlate =
         this._columns[this._selectColumn].stack[
           this._columns[this._selectColumn].top
-        ];
+          ];
       if (this._selectPlate) {
         this._selectPlate.selected = true;
       }
@@ -133,6 +133,15 @@ class Container implements ContainerInterface {
       this._moveCount += 1;
     }
   };
+
+  public drop = (loc?: number) => {
+    this.select(loc, true);
+  };
+
+  public up = (loc?: number) => {
+    this.select(loc, false);
+  };
 }
+
 
 export default Container;

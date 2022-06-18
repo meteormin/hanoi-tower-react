@@ -1,13 +1,13 @@
-import React, {Component, KeyboardEvent, DragEvent} from 'react';
-import {Container as BsContainer, Row, Col, Button} from 'react-bootstrap';
+import React, { Component, KeyboardEvent, DragEvent } from "react";
+import { Container as BsContainer, Row, Col, Button } from "react-bootstrap";
 import {
   ContainerProps,
   Plate,
-  Container as ContainerInterface,
-} from '../types';
-import Column from './Column';
-import {date} from '../helpers';
-import moment from 'moment';
+  Container as ContainerInterface
+} from "../types";
+import Column from "./Column";
+import { date } from "../helpers";
+import moment from "moment";
 
 interface ContainerState {
   module: ContainerInterface;
@@ -30,8 +30,8 @@ class Container extends Component<ContainerProps, ContainerState> {
       start: false,
       startAt: null,
       end: false,
-      time: '00:00:00',
-      timerId: null,
+      time: "00:00:00",
+      timerId: null
     };
   }
 
@@ -43,15 +43,15 @@ class Container extends Component<ContainerProps, ContainerState> {
       start: false,
       startAt: null,
       end: false,
-      time: '00:00:00',
-      timerId: null,
+      time: "00:00:00",
+      timerId: null
     });
   }
 
   componentDidUpdate(
     _prevProps: Readonly<ContainerProps>,
     prevState: Readonly<ContainerState>,
-    _snapshot?: any,
+    _snapshot?: any
   ) {
     if (prevState.module.level != this.props.module.level) {
       this.endTimer();
@@ -62,20 +62,35 @@ class Container extends Component<ContainerProps, ContainerState> {
         start: false,
         startAt: null,
         end: false,
-        time: '00:00:00',
-        timerId: null,
+        time: "00:00:00",
+        timerId: null
       });
     }
 
     if (prevState.selectedPlate != this.state.module.selectedPlate) {
       this.setState({
-        selectedPlate: this.state.module.selectedPlate,
+        selectedPlate: this.state.module.selectedPlate
       });
+
+      if (!this.state.start) {
+        this.startTimer();
+        this.setState({
+          start: true
+        });
+      }
+
+      if (this.state.module.columns[2]) {
+        if (
+          this.state.module.columns[2].stack.length == this.state.module.level
+        ) {
+          this.endTimer();
+        }
+      }
     }
 
     if (prevState.selectedColumn != this.state.module.selectedColumn) {
       this.setState({
-        selectedColumn: this.state.module.selectedColumn,
+        selectedColumn: this.state.module.selectedColumn
       });
     }
 
@@ -88,7 +103,7 @@ class Container extends Component<ContainerProps, ContainerState> {
       this.state.module.columns[2].stack.length
     ) {
       this.setState({
-        module: this.state.module,
+        module: this.state.module
       });
     }
   }
@@ -97,13 +112,13 @@ class Container extends Component<ContainerProps, ContainerState> {
     const now = date(date.now());
     const timerId = setInterval(() => {
       this.setState({
-        time: this.getTimeString(),
+        time: this.getTimeString()
       });
     }, 1000);
 
     this.setState({
       startAt: now,
-      timerId: timerId,
+      timerId: timerId
     });
   };
 
@@ -112,7 +127,7 @@ class Container extends Component<ContainerProps, ContainerState> {
       clearInterval(this.state.timerId);
       this.setState({
         timerId: null,
-        end: true,
+        end: true
       });
     }
   };
@@ -121,13 +136,17 @@ class Container extends Component<ContainerProps, ContainerState> {
     e.preventDefault();
     console.log(e);
     switch (e.code) {
-      case 'Space':
-        this.select();
+      case "Space":
+        if (this.state.module.selectedPlate) {
+          this.drop(this.state.module.selectedColumn);
+        } else {
+          this.up(this.state.module.selectedColumn);
+        }
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         this.right();
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
         this.left();
         break;
     }
@@ -139,42 +158,34 @@ class Container extends Component<ContainerProps, ContainerState> {
       .duration(now.diff(this.state.startAt || now))
       .asMilliseconds();
 
-    return date(time).utc().format('HH:mm:ss');
-  };
-
-  select = (loc?: number, down?: boolean) => {
-    this.state.module.select(loc, down);
-    this.setState({
-      selectedPlate: this.state.module.selectedPlate,
-    });
-
-    if (!this.state.start) {
-      this.startTimer();
-      this.setState({
-        start: true,
-      });
-    }
-
-    if (this.state.module.columns[2]) {
-      if (
-        this.state.module.columns[2].stack.length == this.state.module.level
-      ) {
-        this.endTimer();
-      }
-    }
+    return date(time).utc().format("HH:mm:ss");
   };
 
   right = () => {
     this.state.module.right();
     this.setState({
-      selectedColumn: this.state.module.selectedColumn,
+      selectedColumn: this.state.module.selectedColumn
     });
   };
 
   left = () => {
     this.state.module.left();
     this.setState({
-      selectedColumn: this.state.module.selectedColumn,
+      selectedColumn: this.state.module.selectedColumn
+    });
+  };
+
+  up = (loc: number) => {
+    this.state.module.up(loc);
+    this.setState({
+      selectedPlate: this.state.module.selectedPlate
+    });
+  };
+
+  drop = (loc: number) => {
+    this.state.module.drop(loc);
+    this.setState({
+      selectedPlate: this.state.module.selectedPlate
     });
   };
 
@@ -183,49 +194,61 @@ class Container extends Component<ContainerProps, ContainerState> {
   };
 
   onDragOver = (_e: DragEvent<HTMLElement>, loc: number) => {
-    console.log('drag over', loc);
+    console.log("drag over", loc);
   };
 
   onDrop = (_e: DragEvent<HTMLElement>, loc: number) => {
-    console.log('drop', loc);
-    this.select(loc, true);
+    console.log("drop", loc);
+    this.drop(loc);
+    this.setState({
+      selectedColumn: this.state.module.selectedColumn
+    });
+    this.setState({
+      selectedPlate: this.state.module.selectedPlate
+    });
   };
 
   onDragStart = (e: DragEvent<HTMLElement>, loc: number, size: number) => {
-    e.dataTransfer.setData('plate', size.toString());
-    this.select(loc);
+    e.dataTransfer.setData("plate", size.toString());
+    this.up(loc);
+    this.setState({
+      selectedColumn: this.state.module.selectedColumn
+    });
+    this.setState({
+      selectedPlate: this.state.module.selectedPlate
+    });
   };
 
   render() {
     return (
       <BsContainer
-        className={'justify-content-md-center'}
+        className={"justify-content-md-center"}
         onKeyDown={this.onKeyDown}
         tabIndex={this.state.end ? 1 : 0}
       >
-        <Row className={'my-5 mx-2'}>
+        <Row className={"my-5 mx-2"}>
           <Col>
             <span
               className={
                 this.state.end
                   ? this.isMinCount()
-                    ? 'text-success'
-                    : 'text-danger'
-                  : ''
+                    ? "text-success"
+                    : "text-danger"
+                  : ""
               }
             >
-              Move Count: {this.state.module.moveCount} / Minimum Move Count:{' '}
+              Move Count: {this.state.module.moveCount} / Minimum Move Count:{" "}
               {this.state.module.minMove}
             </span>
           </Col>
           <Col>
-            <span className={this.state.end ? 'text-success' : ''}>
-              Time: {this.state.time + ' '}
-              <span>{this.state.end ? '(END)' : ''}</span>
+            <span className={this.state.end ? "text-success" : ""}>
+              Time: {this.state.time + " "}
+              <span>{this.state.end ? "(END)" : ""}</span>
             </span>
           </Col>
         </Row>
-        <Row className={'mt-5'}>
+        <Row className={"mt-5"}>
           <Column
             level={this.state.module.level}
             column={this.state.module.columns[0]}
@@ -251,27 +274,27 @@ class Container extends Component<ContainerProps, ContainerState> {
             onDragStart={this.onDragStart}
           />
         </Row>
-        <Row className={'mt-4 justify-content-md-center'}>
-          <Col className={'text-center'}>
+        <Row className={"mt-4 justify-content-md-center"}>
+          <Col className={"text-center"}>
             <Button
-              variant={this.state.selectedColumn == 0 ? 'primary' : 'secondary'}
-              className={'w-100'}
+              variant={this.state.selectedColumn == 0 ? "primary" : "secondary"}
+              className={"w-100"}
             >
               Tower1: Start
             </Button>
           </Col>
-          <Col className={'text-center'}>
+          <Col className={"text-center"}>
             <Button
-              variant={this.state.selectedColumn == 1 ? 'primary' : 'secondary'}
-              className={'w-100'}
+              variant={this.state.selectedColumn == 1 ? "primary" : "secondary"}
+              className={"w-100"}
             >
               Tower2
             </Button>
           </Col>
-          <Col className={'text-center'}>
+          <Col className={"text-center"}>
             <Button
-              variant={this.state.selectedColumn == 2 ? 'primary' : 'secondary'}
-              className={'w-100'}
+              variant={this.state.selectedColumn == 2 ? "primary" : "secondary"}
+              className={"w-100"}
             >
               Tower3: Target
             </Button>
