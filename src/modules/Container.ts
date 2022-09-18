@@ -3,7 +3,7 @@ import {
   Plate as PlateInterface,
   Column as ColumnInterface,
   ContainerDeps
-} from "../types";
+} from '../types';
 
 class Container implements ContainerInterface {
   private readonly _level: number;
@@ -93,11 +93,10 @@ class Container implements ContainerInterface {
   }
 
   private move = (direction: number) => {
-    this._prevColumn = this._selectColumn;
     this._selectColumn += direction;
     if (this._selectColumn < 0) {
-      this._selectColumn = 2;
-    } else if (this._selectColumn > 2) {
+      this._selectColumn = this._columns.length - 1;
+    } else if (this._selectColumn > this._columns.length - 1) {
       this._selectColumn = 0;
     }
   };
@@ -111,7 +110,7 @@ class Container implements ContainerInterface {
   };
 
   private select = (loc?: number, drop?: boolean) => {
-    this._selectColumn = loc == undefined ? this._selectColumn : loc;
+    this._selectColumn = loc === undefined ? this._selectColumn : loc;
     if (this._selectPlate == null) {
       if (!drop) {
         this._prevColumn = this._selectColumn;
@@ -119,7 +118,7 @@ class Container implements ContainerInterface {
       this._selectPlate =
         this._columns[this._selectColumn].stack[
           this._columns[this._selectColumn].top
-          ];
+        ];
       if (this._selectPlate) {
         this._selectPlate.selected = true;
       }
@@ -142,6 +141,5 @@ class Container implements ContainerInterface {
     this.select(loc, false);
   };
 }
-
 
 export default Container;
