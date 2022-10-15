@@ -1,4 +1,4 @@
-import { DragEvent } from "react";
+import { DragEvent } from 'react';
 
 export interface Plate {
   size: number;
@@ -45,15 +45,15 @@ export interface ContainerDeps {
 }
 
 export interface ContainerImpl {
-  new(level: number, deps: ContainerDeps): Container;
+  new (level: number, deps: ContainerDeps): Container;
 }
 
 export interface ColumnImpl {
-  new(loc: number): Column;
+  new (loc: number): Column;
 }
 
 export interface PlateImpl {
-  new(size: number): Plate;
+  new (size: number): Plate;
 }
 
 export interface ContainerProps {

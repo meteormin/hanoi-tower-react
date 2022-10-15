@@ -11,5 +11,5 @@ export class PlateModule extends Plate {}
 export const makeContainerModule = (level: number): ContainerModule =>
   new ContainerModule(level, {
     Column: ColumnModule,
-    Plate: PlateModule,
+    Plate: PlateModule
   });

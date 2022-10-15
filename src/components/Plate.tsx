@@ -1,79 +1,62 @@
-import React, {Component, DragEvent} from 'react';
-import {PlateProps} from '../types';
-import {Row, Col, Button} from 'react-bootstrap';
+import React, { DragEvent, useEffect, useState } from 'react';
+import { PlateProps } from '../types';
+import { Row, Col, Button } from 'react-bootstrap';
 
-interface PlateState {
-  size: number;
-  selected: boolean;
+function initElements(size: number, selected: boolean) {
+  if (size != 0) {
+    const elements = [];
+    for (let i = 0; i < size; i++) {
+      elements.push(
+        <Col md='auto' key={'plate' + i}>
+          <Button
+            variant={selected ? 'primary' : 'secondary'}
+            className='w-100'
+          >
+            {size}
+          </Button>
+        </Col>
+      );
+    }
+    return elements;
+  }
+
+  return null;
 }
 
-class Plate extends Component<PlateProps, PlateState> {
-  constructor(props: PlateProps) {
-    super(props);
-    this.state = {size: props.size, selected: props.selected};
-  }
+function Plate(props: PlateProps) {
+  const [size, setSize] = useState<number>();
+  const [selected, setSelected] = useState<boolean>();
+  const [elements, setElements] = useState<JSX.Element[] | null>();
 
-  componentDidUpdate(
-    prevProps: Readonly<PlateProps>,
-    _prevState: Readonly<PlateState>,
-    _snapshot?: any,
-  ) {
-    if (this.props.size != prevProps.size) {
-      this.setState({
-        size: this.props.size,
-      });
+  useEffect(() => {
+    setSize(props.size);
+    setSelected(props.selected);
+  }, [props.size, props.selected]);
+
+  useEffect(() => {
+    if (size != undefined && selected != undefined) {
+      setElements(initElements(size, selected));
     }
+  }, [size, selected]);
 
-    if (this.props.selected != prevProps.selected) {
-      this.setState({
-        selected: this.props.selected,
-      });
-    }
-  }
-
-  init = () => {
-    if (this.state.size != 0) {
-      const elements = [];
-      for (let i = 0; i < this.state.size; i++) {
-        elements.push(
-          <Col md={'auto'} key={'plate' + i}>
-            <Button
-              variant={this.state.selected ? 'primary' : 'secondary'}
-              className={'w-100'}
-            >
-              {this.state.size}
-            </Button>
-          </Col>,
-        );
-      }
-      return elements;
-    }
-
-    return null;
-  };
-
-  onDragStart = (e: DragEvent<HTMLElement>) => {
-    if (this.props.onDragStart) {
-      this.setState({
-        selected: true,
-      });
-      this.props.onDragStart(e, this.state.size);
+  const handleDragStart = (e: DragEvent<HTMLElement>) => {
+    if (props.onDragStart && size != undefined) {
+      setSelected(true);
+      props.onDragStart(e, size);
     } else {
       e.preventDefault();
     }
   };
 
-  render() {
-    return (
-      <Row
-        className={'justify-content-md-center'}
-        draggable={!!this.props.onDragStart}
-        onDragStart={this.onDragStart}
-      >
-        {this.init()}
-      </Row>
-    );
-  }
+  return (
+    <Row
+      className='justify-content-md-center'
+      draggable={!!props.onDragStart}
+      onDragStart={handleDragStart}
+    >
+      {elements}
+    </Row>
+  );
 }
 
 export default Plate;
