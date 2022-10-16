@@ -92,24 +92,24 @@ class Container implements ContainerInterface {
     this._prevColumn = value;
   }
 
-  private move = (direction: number) => {
+  private move(direction: number) {
     this._selectColumn += direction;
     if (this._selectColumn < 0) {
       this._selectColumn = this._columns.length - 1;
     } else if (this._selectColumn > this._columns.length - 1) {
       this._selectColumn = 0;
     }
-  };
+  }
 
-  public left = () => {
+  public left() {
     this.move(Container._LEFT);
-  };
+  }
 
-  public right = () => {
+  public right() {
     this.move(Container._RIGHT);
-  };
+  }
 
-  private select = (loc?: number, drop?: boolean) => {
+  private select(loc?: number, drop?: boolean) {
     this._selectColumn = loc === undefined ? this._selectColumn : loc;
     if (this._selectPlate == null) {
       if (!drop) {
@@ -131,15 +131,15 @@ class Container implements ContainerInterface {
       this._selectPlate = null;
       this._moveCount += 1;
     }
-  };
+  }
 
-  public drop = (loc?: number) => {
+  public drop(loc?: number) {
     this.select(loc, true);
-  };
+  }
 
-  public up = (loc?: number) => {
+  public up(loc?: number) {
     this.select(loc, false);
-  };
+  }
 }
 
 export default Container;

@@ -4,29 +4,21 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 function initElements(size: number, selected: boolean) {
   if (size != 0) {
-    const elements = [];
-    for (let i = 0; i < size; i++) {
-      elements.push(
-        <Col md='auto' key={'plate' + i}>
-          <Button
-            variant={selected ? 'primary' : 'secondary'}
-            className='w-100'
-          >
-            {size}
-          </Button>
-        </Col>
-      );
-    }
-    return elements;
+    return (
+      <Col lg={size + 1}>
+        <Button variant={selected ? 'primary' : 'secondary'} className='w-100'>
+          {size}
+        </Button>
+      </Col>
+    );
   }
-
   return null;
 }
 
 function Plate(props: PlateProps) {
   const [size, setSize] = useState<number>();
   const [selected, setSelected] = useState<boolean>();
-  const [elements, setElements] = useState<JSX.Element[] | null>();
+  const [elements, setElements] = useState<JSX.Element | null>();
 
   useEffect(() => {
     setSize(props.size);

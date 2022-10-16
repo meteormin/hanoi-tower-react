@@ -33,7 +33,6 @@ function makePlate(
       plates
         .map((p, i) => {
           console.log(p);
-
           if (i == plates.length - 1) {
             return (
               <Plate
@@ -46,6 +45,7 @@ function makePlate(
               />
             );
           }
+
           return <Plate key={'p' + i} size={p.size} selected={p.selected} />;
         })
         .reverse()

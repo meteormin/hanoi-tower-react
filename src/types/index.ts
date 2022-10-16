@@ -58,6 +58,7 @@ export interface PlateImpl {
 
 export interface ContainerProps {
   module: Container;
+  onReset: (level: number) => any;
 }
 
 export interface ColumnProps {

@@ -20,7 +20,15 @@ const HanoiTower = (props: HanoiTowerProps) => {
     }
   }, [props]);
 
-  return <Fragment>{module ? <Container module={module} /> : null}</Fragment>;
+  const handleReset = (level: number) => {
+    setModule(makeContainerModule(level));
+  };
+
+  return (
+    <Fragment>
+      {module ? <Container module={module} onReset={handleReset} /> : null}
+    </Fragment>
+  );
 };
 
 export default HanoiTower;

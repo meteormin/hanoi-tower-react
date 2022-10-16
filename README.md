@@ -62,6 +62,7 @@ export default App;
 - 키보드
   - 좌, 우 방향키
   - 스페이스 원판 선택 및 원판 드랍
+  - 리셋: R
 
 ## Structure
 

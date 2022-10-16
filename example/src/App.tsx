@@ -13,7 +13,10 @@ const App = () => {
     { name: 'level 4', value: 4 },
     { name: 'level 5', value: 5 },
     { name: 'level 6', value: 6 },
-    { name: 'level 7', value: 7 }
+    { name: 'level 7', value: 7 },
+    { name: 'level 8', value: 8 },
+    { name: 'level 9', value: 9 },
+    { name: 'level 10', value: 10 }
   ];
 
   return (

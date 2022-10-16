@@ -5,8 +5,7 @@ import Column from './Column';
 import { date } from '../helpers';
 import moment from 'moment';
 
-function Container(props: ContainerProps) {
-  const module = props.module;
+function Container({ module, onReset }: ContainerProps) {
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
   const [selectedPlate, setSelectedPlate] = useState<Plate | null>(null);
   const [start, setStart] = useState<boolean>(false);
@@ -17,6 +16,7 @@ function Container(props: ContainerProps) {
   const [moveCount, setMoveCount] = useState<number>(0);
 
   const resetState = () => {
+    endTimer();
     setSelectedColumn(0);
     setSelectedPlate(null);
     setStart(false);
@@ -67,6 +67,9 @@ function Container(props: ContainerProps) {
       case 'ArrowLeft':
         left();
         break;
+      case 'KeyR':
+        resetState();
+        onReset(module.level);
     }
   };
 
