@@ -2,8 +2,6 @@ import { DragEvent } from 'react';
 
 export interface Plate {
   size: number;
-  bottom: Plate | null;
-  top: Plate | null;
   selected: boolean;
 }
 
