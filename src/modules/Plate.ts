@@ -6,7 +6,7 @@ class Plate implements PlateInterface {
 
   constructor(size: number) {
     this._size = size;
-    this._top = null;
+    this._selected = false;
   }
 
   get size(): number {

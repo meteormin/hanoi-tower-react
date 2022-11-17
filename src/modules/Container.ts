@@ -123,8 +123,11 @@ class Container implements ContainerInterface {
         this._selectPlate.selected = true;
       }
     } else {
-      if (this._columns[this._selectColumn].push(this._selectPlate)) {
-        this._columns[this._prevColumn].remove(this._selectPlate);
+      const selectedPlate = this._columns[this._prevColumn].pop();
+      if (selectedPlate?.selected && selectedPlate === this._selectPlate) {
+        this._columns[this._selectColumn].push(selectedPlate);
+      } else if (selectedPlate) {
+        this._columns[this._prevColumn].push(selectedPlate);
       }
 
       this._selectPlate.selected = false;
