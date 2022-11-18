@@ -106,7 +106,9 @@ class Container implements ContainerInterface {
     } else {
       const selectedPlate = this._columns[this._prevColumn].pop();
       if (selectedPlate?.selected && selectedPlate === this._selectPlate) {
-        this._columns[this._selectColumn].push(selectedPlate);
+        if (!this._columns[this._selectColumn].push(selectedPlate)) {
+          this._columns[this._prevColumn].push(selectedPlate);
+        }
       } else if (selectedPlate) {
         this._columns[this._prevColumn].push(selectedPlate);
       }

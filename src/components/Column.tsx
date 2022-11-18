@@ -32,7 +32,6 @@ function makePlate(
     return blank.concat(
       plates
         .map((p, i) => {
-          console.log(p);
           if (i == plates.length - 1) {
             return (
               <Plate

@@ -2,7 +2,7 @@
 
 > React, TypeScript, Bootstrap
 
-![version](https://img.shields.io/badge/version-v1.1.4-blue)
+![version](https://img.shields.io/badge/version-v1.1.5-blue)
 ![React](https://img.shields.io/badge/ReactJs-^17.0.0-61DAFB?logo=react)
 
 ## Install
