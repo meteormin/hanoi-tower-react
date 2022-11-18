@@ -1,8 +1,7 @@
 import {
   Container as ContainerInterface,
   Plate as PlateInterface,
-  Column as ColumnInterface,
-  ContainerDeps
+  Column as ColumnInterface
 } from '../types';
 
 class Container implements ContainerInterface {
@@ -12,9 +11,7 @@ class Container implements ContainerInterface {
   private _moveCount: number;
   private _time: number;
 
-  private readonly _plates: PlateInterface[];
   private readonly _columns: ColumnInterface[];
-
   private _prevColumn: number;
   private _selectColumn: number;
   private _selectPlate: PlateInterface | null;
@@ -22,36 +19,20 @@ class Container implements ContainerInterface {
   private static readonly _RIGHT = 1;
   private static readonly _LEFT = -1;
 
-  constructor(level: number, deps: ContainerDeps) {
+  constructor(level: number, columns: ColumnInterface[]) {
     this._level = level;
     this._minMove = 2 ** level - 1;
 
     this._moveCount = 0;
     this._time = 0;
-
-    this._plates = [];
-    this._columns = [];
-
-    this._columns.push(new deps.Column(0));
-    this._columns.push(new deps.Column(1));
-    this._columns.push(new deps.Column(2));
-
-    for (let i = level; i > 0; i--) {
-      this._plates.push(new deps.Plate(i));
-    }
-
+    this._columns = columns;
     this._selectPlate = null;
     this._selectColumn = 0;
     this._prevColumn = 0;
-    this._columns[this._selectColumn].stack = this._plates;
   }
 
   get columns(): ColumnInterface[] {
     return this._columns;
-  }
-
-  get plates(): PlateInterface[] {
-    return this._plates;
   }
 
   get level(): number {

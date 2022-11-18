@@ -19,7 +19,6 @@ export interface Column {
 
 export interface Container {
   columns: Column[];
-  plates: Plate[];
   level: number;
   prevColumn: number;
   selectedPlate: Plate | null;
@@ -35,23 +34,6 @@ export interface Container {
   drop(loc: number): void;
 
   up(loc: number): void;
-}
-
-export interface ContainerDeps {
-  Column: ColumnImpl;
-  Plate: PlateImpl;
-}
-
-export interface ContainerImpl {
-  new (level: number, deps: ContainerDeps): Container;
-}
-
-export interface ColumnImpl {
-  new (loc: number): Column;
-}
-
-export interface PlateImpl {
-  new (size: number): Plate;
 }
 
 export interface ContainerProps {
