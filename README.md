@@ -42,7 +42,7 @@ const App = () => {
         }} value={level}>
           {levelOptions.map((opt, index) => <option key={index} value={opt.value}>{opt.name}</option>)}
         </Form.Select>
-        <HanoiTower level={level} />
+        <HanoiTower level={level} autoConfig={{ delay: 500 /** default 500 ms **/ }} />
       </Card.Body>
     </Card>
   );
