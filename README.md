@@ -2,7 +2,7 @@
 
 > React, TypeScript, Bootstrap
 
-![version](https://img.shields.io/badge/version-v1.1.5-blue)
+![version](https://img.shields.io/badge/version-v2.0.0-blue)
 ![React](https://img.shields.io/badge/ReactJs-^17.0.0-61DAFB?logo=react)
 
 ## Install
@@ -63,6 +63,7 @@ export default App;
   - 좌, 우 방향키
   - 스페이스 원판 선택 및 원판 드랍
   - 리셋: R
+  - Auto Solve: A
 
 ## Structure
 

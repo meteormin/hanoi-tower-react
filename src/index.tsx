@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Container from './components/Contrainer';
 import { makeContainerModule } from './modules';
-import { Container as ContainerInterface } from './types';
+import { AutoConfig, Container as ContainerInterface } from './types';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export interface HanoiTowerProps {
   level?: number;
+  autoConfig?: AutoConfig;
 }
 
 const HanoiTower = (props: HanoiTowerProps) => {
@@ -27,7 +28,13 @@ const HanoiTower = (props: HanoiTowerProps) => {
 
   return (
     <Fragment>
-      {module ? <Container module={module} onReset={handleReset} /> : null}
+      {module ? (
+        <Container
+          module={module}
+          onReset={handleReset}
+          autoConfig={props.autoConfig}
+        />
+      ) : null}
     </Fragment>
   );
 };

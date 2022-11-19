@@ -36,7 +36,7 @@ const App = () => {
             </option>
           ))}
         </Form.Select>
-        <HanoiTower level={level} />
+        <HanoiTower level={level} autoConfig={{ delay: 1 }} />
       </Card.Body>
     </Card>
   );

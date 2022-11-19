@@ -39,6 +39,11 @@ export interface Container {
 export interface ContainerProps {
   module: Container;
   onReset: (level: number) => any;
+  autoConfig?: AutoConfig;
+}
+
+export interface AutoConfig {
+  delay?: number;
 }
 
 export interface ColumnProps {

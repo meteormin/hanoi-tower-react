@@ -4,8 +4,9 @@ import { ContainerProps, Plate } from '../types';
 import Column from './Column';
 import { date } from '../helpers';
 import moment from 'moment';
+import AutomaticSolver from './AutomaticSolver';
 
-function Container({ module, onReset }: ContainerProps) {
+function Container({ module, onReset, autoConfig }: ContainerProps) {
   const [selectedColumn, setSelectedColumn] = useState<number>(0);
   const [selectedPlate, setSelectedPlate] = useState<Plate | null>(null);
   const [start, setStart] = useState<boolean>(false);
@@ -14,6 +15,7 @@ function Container({ module, onReset }: ContainerProps) {
   const [time, setTime] = useState<string>('00:00:00');
   const [timerId, setTimerId] = useState<NodeJS.Timer | null>(null);
   const [moveCount, setMoveCount] = useState<number>(0);
+  const [isAuto, setIsAuto] = useState<boolean>(false);
 
   const resetState = () => {
     endTimer();
@@ -25,6 +27,7 @@ function Container({ module, onReset }: ContainerProps) {
     setTime('00:00:00');
     setTimerId(null);
     setMoveCount(0);
+    setIsAuto(false);
   };
 
   const startTimer = () => {
@@ -70,6 +73,10 @@ function Container({ module, onReset }: ContainerProps) {
       case 'KeyR':
         resetState();
         onReset(module.level);
+        break;
+      case 'KeyA':
+        handleAuto();
+        break;
     }
   };
 
@@ -119,6 +126,23 @@ function Container({ module, onReset }: ContainerProps) {
     up(loc);
   };
 
+  const handleAuto = () => {
+    setStartAt(moment());
+    setStart(true);
+    setIsAuto(true);
+
+    const delayTime = autoConfig?.delay || 500;
+
+    const solver = AutomaticSolver(module, {
+      right,
+      left,
+      up,
+      drop
+    });
+
+    solver.run(delayTime);
+  };
+
   useEffect(() => {
     resetState();
   }, [module.level]);
@@ -139,6 +163,14 @@ function Container({ module, onReset }: ContainerProps) {
       startTimer();
     }
   }, [startAt]);
+
+  useEffect(() => {
+    if (isAuto) {
+      if (isMinCount()) {
+        endTimer();
+      }
+    }
+  }, [time, isAuto]);
 
   return (
     <BsContainer
